@@ -1,0 +1,47 @@
+/* Contenedor principal del historial de ventas */
+.sales-history{
+
+    width:90%;
+    max-width:1200px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+
+}
+
+/* Título de la sección */
+.sales-history h2{
+
+    text-align:center;
+    color:#8B0000;
+    margin-bottom:20px;
+
+}
+
+/* Tabla donde se muestran las ventas realizadas */
+.sales-history table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+/* Encabezados de la tabla */
+.sales-history th{
+
+    background:#111;
+    color:white;
+    padding:12px;
+
+}
+
+/* Celdas con la información de cada venta */
+.sales-history td{
+
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+
+}

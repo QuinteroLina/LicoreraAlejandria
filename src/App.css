@@ -1,0 +1,18 @@
+/* Contenedor principal de la vista */
+.container{
+    text-align:center;
+    margin-top:80px;
+}
+
+/* Título principal */
+h1{
+    color:#7B112C;
+    font-size:45px;
+    margin-bottom:20px;
+}
+
+/* Texto descriptivo */
+p{
+    font-size:22px;
+    color:#444;
+}

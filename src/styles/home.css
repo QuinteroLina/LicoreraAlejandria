@@ -1,0 +1,49 @@
+/* Sección principal de bienvenida */
+.home{
+    min-height:80vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:40px;
+    background:linear-gradient(to right,#111,#5a0f0f);
+    color:white;
+}
+
+/* Logo principal de la licorera */
+.logo-fondo{
+    width:180px;
+    margin-bottom:25px;
+}
+
+/* Título de bienvenida */
+.contenido h1{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+/* Descripción de la empresa */
+.contenido p{
+    max-width:700px;
+    font-size:20px;
+    line-height:1.6;
+    margin-bottom:30px;
+}
+
+/* Botón para acceder al catálogo */
+.contenido button{
+    padding:14px 30px;
+    background:#b8860b;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+
+/* Efecto al pasar el cursor sobre el botón */
+.contenido button:hover{
+    background:#946c08;
+}

@@ -1,0 +1,56 @@
+/* Barra de navegación principal */
+.navbar{
+    background:#6B0F1A;
+    height:75px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    box-shadow:0 3px 10px rgba(0,0,0,.2);
+}
+
+/* Contenedor del logo y nombre de la empresa */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+/* Imagen del logo */
+.logo img{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+    border-radius:50%;
+    background:white;
+    padding:4px;
+}
+
+/* Nombre de la empresa */
+.logo h2{
+    color:white;
+    font-size:30px;
+    margin:0;
+}
+
+/* Menú de navegación */
+.navbar ul{
+    display:flex;
+    gap:30px;
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+/* Opciones del menú */
+.navbar li{
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+/* Efecto al pasar el cursor sobre las opciones */
+.navbar li:hover{
+    color:#F4C542;
+}

@@ -1,0 +1,87 @@
+/* Tarjeta individual de cada producto */
+.product-card{
+
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    transition:.3s;
+    text-align:center;
+    padding:20px;
+
+}
+
+/* Efecto al pasar el cursor sobre la tarjeta */
+.product-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+/* Imagen del producto */
+.product-card img{
+
+    width:100%;
+    height:220px;
+    object-fit:contain;
+
+}
+
+/* Nombre del producto */
+.product-card h3{
+
+    margin:15px 0;
+    color:#222;
+    font-size:20px;
+
+}
+
+/* Precio de venta del producto */
+.precio{
+
+    color:#8B0000;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:15px;
+
+}
+
+/* Botón para agregar el producto al carrito */
+.product-card button{
+
+    width:100%;
+    padding:12px;
+    background:#8B0000;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+
+}
+
+/* Efecto al pasar el cursor sobre el botón */
+.product-card button:hover{
+
+    background:#650000;
+
+}
+
+/* Categoría del producto */
+.categoria{
+
+    color:#555;
+    font-size:15px;
+    margin-bottom:8px;
+
+}
+
+/* Cantidad disponible en inventario */
+.stock{
+
+    color:#198754;
+    font-weight:bold;
+    margin-bottom:15px;
+
+}

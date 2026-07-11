@@ -1,0 +1,14 @@
+/* Estilos del pie de página de la aplicación */
+footer{
+
+    margin-top:100px;
+
+    background:#111;
+
+    color:white;
+
+    text-align:center;
+
+    padding:20px;
+
+}

@@ -1,0 +1,27 @@
+/* Contenedor principal de la sección de productos */
+.productos{
+
+    width:90%;
+    max-width:1300px;
+    margin:60px auto;
+
+}
+
+/* Título del catálogo */
+.productos h2{
+
+    text-align:center;
+    font-size:36px;
+    color:#8B0000;
+    margin-bottom:40px;
+
+}
+
+/* Distribución de las tarjetas de productos */
+.contenedor-productos{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+
+}
