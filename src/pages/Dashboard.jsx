@@ -1,8 +1,7 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../styles/dashboard.css";
 import ProductManager from "../components/ProductManager";
 import { CartContext } from "../context/CartContext";
-import productos from "../data/productos";
 
 // Componente que muestra el panel administrativo de la aplicación
 function Dashboard() {
@@ -10,8 +9,48 @@ function Dashboard() {
     // Obtiene la información del carrito desde el contexto
     const { carrito, total } = useContext(CartContext);
 
+    // Estado que almacena el inventario actual
+    const [productos, setProductos] = useState([]);
+
+    // Carga el inventario almacenado en LocalStorage
+    const cargarInventario = () => {
+
+        const datos =
+            JSON.parse(localStorage.getItem("productos")) || [];
+
+        setProductos(datos);
+
+    };
+
+    // Carga el inventario al iniciar el Dashboard
+    useEffect(() => {
+
+        cargarInventario();
+
+        // Actualiza el Dashboard cuando cambia el inventario
+        window.addEventListener(
+            "inventarioActualizado",
+            cargarInventario
+        );
+
+        return () => {
+
+            window.removeEventListener(
+                "inventarioActualizado",
+                cargarInventario
+            );
+
+        };
+
+    }, []);
+
     // Calcula la cantidad total de productos registrados
     const totalProductos = productos.length;
+
+    // Calcula la cantidad de categorías diferentes
+    const totalCategorias = new Set(
+        productos.map(producto => producto.categoria)
+    ).size;
 
     return (
 
@@ -49,7 +88,7 @@ function Dashboard() {
                     <h2>💰 Total carrito</h2>
 
                     <h3>
-                        ${total.toLocaleString("es-CO")}
+                        ${Number(total).toLocaleString("es-CO")}
                     </h3>
 
                 </div>
@@ -58,7 +97,7 @@ function Dashboard() {
 
                     <h2>📂 Categorías</h2>
 
-                    <h3>6</h3>
+                    <h3>{totalCategorias}</h3>
 
                 </div>
 

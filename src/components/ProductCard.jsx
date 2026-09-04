@@ -8,6 +8,9 @@ function ProductCard({ producto }) {
     // Obtiene la función para agregar productos al carrito
     const { agregarAlCarrito } = useContext(CartContext);
 
+    // Verifica si el producto está agotado
+    const agotado = producto.stock <= 0;
+
     return (
 
         <div className="product-card">
@@ -21,7 +24,7 @@ function ProductCard({ producto }) {
 
             {/* Precio de venta del producto */}
             <p className="precio">
-                ${producto.venta.toLocaleString("es-CO")}
+                ${Number(producto.venta).toLocaleString("es-CO")}
             </p>
 
             {/* Categoría del producto */}
@@ -31,14 +34,23 @@ function ProductCard({ producto }) {
 
             {/* Cantidad disponible en inventario */}
             <p className="stock">
-                Disponibles: {producto.stock}
+                {
+                    agotado
+                        ? "Agotado"
+                        : `Disponibles: ${producto.stock}`
+                }
             </p>
 
             {/* Agrega el producto seleccionado al carrito */}
             <button
                 onClick={() => agregarAlCarrito(producto)}
+                disabled={agotado}
             >
-                Agregar al carrito
+                {
+                    agotado
+                        ? "Producto agotado"
+                        : "Agregar al carrito"
+                }
             </button>
 
         </div>

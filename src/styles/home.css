@@ -32,18 +32,21 @@
 }
 
 /* Botón para acceder al catálogo */
-.contenido button{
-    padding:14px 30px;
-    background:#b8860b;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:18px;
-    transition:.3s;
+.btn-catalogo {
+    display: inline-block;
+    background: #d4a017;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
-/* Efecto al pasar el cursor sobre el botón */
-.contenido button:hover{
-    background:#946c08;
+/* Efecto al pasar el cursor */
+.btn-catalogo:hover {
+    background: #b8860b;
+    color: white;
+    transform: scale(1.03);
 }

@@ -24,19 +24,35 @@ export function CartProvider({ children }) {
 
     }, [carrito]);
 
-    // Agrega un producto al carrito o aumenta su cantidad si ya existe
+    // Agrega un producto al carrito verificando primero el stock disponible
     const agregarAlCarrito = (producto) => {
 
         const existe = carrito.find(
             item => item.id === producto.id
         );
 
+        const cantidadActual = existe
+            ? existe.cantidad
+            : 0;
+
+        // Verifica que todavía haya unidades disponibles
+        if (cantidadActual >= producto.stock) {
+
+            alert("⚠️ No hay más unidades disponibles de este producto.");
+
+            return;
+
+        }
+
         if (existe) {
 
             const nuevoCarrito = carrito.map(item =>
 
                 item.id === producto.id
-                    ? { ...item, cantidad: item.cantidad + 1 }
+                    ? {
+                        ...item,
+                        cantidad: item.cantidad + 1
+                    }
                     : item
 
             );
@@ -77,7 +93,7 @@ export function CartProvider({ children }) {
 
     };
 
-    // Registra la compra en el historial de ventas
+    // Registra la compra y actualiza el inventario
     const finalizarCompra = () => {
 
         if (carrito.length === 0) {
@@ -88,9 +104,75 @@ export function CartProvider({ children }) {
 
         }
 
-        const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+        // Recupera el inventario actual almacenado
+        const productosGuardados =
+            JSON.parse(localStorage.getItem("productos")) || [];
 
+        // Si todavía no existe un inventario guardado,
+        // se utiliza el listado inicial de productos.
+        if (productosGuardados.length === 0) {
+
+            alert("⚠️ No se encontró el inventario.");
+
+            return;
+
+        }
+
+        // Verifica nuevamente que haya suficiente stock
+        const stockDisponible = carrito.every(item => {
+
+            const producto = productosGuardados.find(
+                producto => producto.id === item.id
+            );
+
+            return producto && producto.stock >= item.cantidad;
+
+        });
+
+        if (!stockDisponible) {
+
+            alert(
+                "⚠️ Uno o más productos no tienen suficiente stock disponible."
+            );
+
+            return;
+
+        }
+
+        // Actualiza las cantidades disponibles
+        const inventarioActualizado = productosGuardados.map(producto => {
+
+            const productoComprado = carrito.find(
+                item => item.id === producto.id
+            );
+
+            if (productoComprado) {
+
+                return {
+                    ...producto,
+                    stock: producto.stock - productoComprado.cantidad
+                };
+
+            }
+
+            return producto;
+
+        });
+
+        // Guarda el inventario actualizado
+        localStorage.setItem(
+            "productos",
+            JSON.stringify(inventarioActualizado)
+        );
+
+        // Recupera el historial de ventas
+        const ventas =
+            JSON.parse(localStorage.getItem("ventas")) || [];
+
+        // Crea el registro de la nueva venta
         const nuevaVenta = {
+
+            id: Date.now(),
 
             fecha: new Date().toLocaleString("es-CO"),
 
@@ -100,13 +182,17 @@ export function CartProvider({ children }) {
 
         };
 
+        // Agrega la nueva venta al historial
         ventas.push(nuevaVenta);
 
         localStorage.setItem(
             "ventas",
             JSON.stringify(ventas)
         );
+        
+        window.dispatchEvent(new Event("ventaRealizada"));
 
+        // Vacía el carrito después de completar la compra
         setCarrito([]);
 
         alert("✅ Compra realizada correctamente.");

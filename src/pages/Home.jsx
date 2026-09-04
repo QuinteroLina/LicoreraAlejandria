@@ -1,4 +1,5 @@
 import "../styles/home.css";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 // Componente que muestra la página principal de bienvenida
@@ -38,7 +39,9 @@ function Home() {
         </p>
 
         {/* Botón para acceder al catálogo de productos */}
-        <button>Ver Catálogo</button>
+        <Link to="/productos" className="btn-catalogo">
+          Ver Catálogo
+          </Link>
 
       </div>
 

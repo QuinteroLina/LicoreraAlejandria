@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import "../styles/cart.css";
 
+// Componente que muestra el carrito de compras
 function Cart() {
 
     // Obtiene los datos y funciones del contexto del carrito
@@ -20,7 +21,6 @@ function Cart() {
             <h2>🛒 Mi Carrito</h2>
 
             {
-
                 // Validar si el carrito tiene productos
                 carrito.length === 0 ? (
 
@@ -31,7 +31,6 @@ function Cart() {
                     <>
 
                         {
-
                             // Recorrer los productos agregados al carrito
                             carrito.map((producto) => (
 
@@ -54,20 +53,25 @@ function Cart() {
                                         </p>
 
                                         <p>
-                                            Precio:
-                                            ${producto.venta.toLocaleString("es-CO")}
+                                            Precio: $
+                                            {Number(producto.venta).toLocaleString("es-CO")}
                                         </p>
 
                                         <p>
-                                            Subtotal:
-                                            ${(producto.venta * producto.cantidad).toLocaleString("es-CO")}
+                                            Subtotal: $
+                                            {(
+                                                Number(producto.venta) *
+                                                producto.cantidad
+                                            ).toLocaleString("es-CO")}
                                         </p>
 
                                     </div>
 
                                     {/* Botón para eliminar un producto del carrito */}
                                     <button
-                                        onClick={() => eliminarProducto(producto.id)}
+                                        onClick={() =>
+                                            eliminarProducto(producto.id)
+                                        }
                                     >
                                         Eliminar
                                     </button>
@@ -75,14 +79,13 @@ function Cart() {
                                 </div>
 
                             ))
-
                         }
 
                         <hr />
 
                         {/* Muestra el valor total de la compra */}
                         <h3>
-                            Total: ${total.toLocaleString("es-CO")}
+                            Total: ${Number(total).toLocaleString("es-CO")}
                         </h3>
 
                         {/* Vacía completamente el carrito */}

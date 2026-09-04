@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import productosIniciales from "../data/productos";
 
 // Componente encargado de administrar los productos del sistema
 function ProductManager({ actualizarTotal }) {
 
     // Estados para almacenar la información del formulario
     const [nombre, setNombre] = useState("");
-    const [precio, setPrecio] = useState("");
+    const [compra, setCompra] = useState("");
+    const [venta, setVenta] = useState("");
     const [categoria, setCategoria] = useState("");
+    const [stock, setStock] = useState("");
     const [imagen, setImagen] = useState("");
 
     // Estado que almacena la lista de productos
@@ -16,25 +19,40 @@ function ProductManager({ actualizarTotal }) {
     const [editando, setEditando] = useState(false);
     const [indiceEditar, setIndiceEditar] = useState(null);
 
-    // Cargar los productos almacenados en LocalStorage al iniciar el componente
+    // Cargar el inventario al iniciar el componente
     useEffect(() => {
 
-        const datos = JSON.parse(localStorage.getItem("productos")) || [];
+        const datosGuardados =
+            JSON.parse(localStorage.getItem("productos"));
 
-        setProductos(datos);
+        // Si ya existe un inventario, se utiliza.
+        // Si no existe, se cargan los productos iniciales.
+        const inventarioInicial =
+            datosGuardados && datosGuardados.length > 0
+                ? datosGuardados
+                : productosIniciales;
+
+        localStorage.setItem(
+            "productos",
+            JSON.stringify(inventarioInicial)
+        );
+
+        setProductos(inventarioInicial);
 
         if (actualizarTotal) {
-            actualizarTotal(datos.length);
+            actualizarTotal(inventarioInicial.length);
         }
 
-    }, []);
+    }, [actualizarTotal]);
 
-    // Limpia los campos del formulario después de agregar o editar
+    // Limpia los campos del formulario
     const limpiarFormulario = () => {
 
         setNombre("");
-        setPrecio("");
+        setCompra("");
+        setVenta("");
         setCategoria("");
+        setStock("");
         setImagen("");
 
         setEditando(false);
@@ -42,12 +60,18 @@ function ProductManager({ actualizarTotal }) {
 
     };
 
-    // Guarda los cambios en LocalStorage y actualiza la lista de productos
+    // Guarda los cambios en LocalStorage
     const guardarLocalStorage = (lista) => {
 
-        localStorage.setItem("productos", JSON.stringify(lista));
+        localStorage.setItem(
+            "productos",
+            JSON.stringify(lista)
+        );
 
         setProductos(lista);
+
+        window.dispatchEvent(
+        );
 
         if (actualizarTotal) {
             actualizarTotal(lista.length);
@@ -60,8 +84,10 @@ function ProductManager({ actualizarTotal }) {
 
         if (
             nombre.trim() === "" ||
-            precio.trim() === "" ||
+            compra.trim() === "" ||
+            venta.trim() === "" ||
             categoria.trim() === "" ||
+            stock.trim() === "" ||
             imagen.trim() === ""
         ) {
             alert("Complete todos los campos.");
@@ -69,28 +95,46 @@ function ProductManager({ actualizarTotal }) {
         }
 
         const nuevoProducto = {
-            nombre,
-            precio,
-            categoria,
-            imagen
+
+            id: Date.now(),
+
+            nombre: nombre.trim(),
+
+            categoria: categoria.trim(),
+
+            compra: Number(compra),
+
+            venta: Number(venta),
+
+            stock: Number(stock),
+
+            imagen: imagen.trim()
+
         };
 
-        const nuevaLista = [...productos, nuevoProducto];
+        const nuevaLista = [
+            ...productos,
+            nuevoProducto
+        ];
 
         guardarLocalStorage(nuevaLista);
 
         limpiarFormulario();
 
-        alert("Producto agregado correctamente.");
+        alert("✅ Producto agregado correctamente.");
 
     };
 
     // Elimina un producto seleccionado
     const eliminarProducto = (indice) => {
 
-        if (!window.confirm("¿Desea eliminar este producto?")) return;
+        if (!window.confirm("¿Desea eliminar este producto?")) {
+            return;
+        }
 
-        const nuevaLista = productos.filter((_, i) => i !== indice);
+        const nuevaLista = productos.filter(
+            (_, i) => i !== indice
+        );
 
         guardarLocalStorage(nuevaLista);
 
@@ -102,11 +146,29 @@ function ProductManager({ actualizarTotal }) {
         const producto = productos[indice];
 
         setNombre(producto.nombre);
-        setPrecio(producto.precio);
-        setCategoria(producto.categoria);
-        setImagen(producto.imagen);
+
+        setCompra(
+            producto.compra ?? ""
+        );
+
+        setVenta(
+            producto.venta ?? ""
+        );
+
+        setCategoria(
+            producto.categoria
+        );
+
+        setStock(
+            producto.stock ?? ""
+        );
+
+        setImagen(
+            producto.imagen
+        );
 
         setEditando(true);
+
         setIndiceEditar(indice);
 
     };
@@ -116,8 +178,10 @@ function ProductManager({ actualizarTotal }) {
 
         if (
             nombre.trim() === "" ||
-            precio.trim() === "" ||
+            compra.trim() === "" ||
+            venta.trim() === "" ||
             categoria.trim() === "" ||
+            stock.trim() === "" ||
             imagen.trim() === ""
         ) {
             alert("Complete todos los campos.");
@@ -127,17 +191,28 @@ function ProductManager({ actualizarTotal }) {
         const copia = [...productos];
 
         copia[indiceEditar] = {
-            nombre,
-            precio,
-            categoria,
-            imagen
+
+            ...copia[indiceEditar],
+
+            nombre: nombre.trim(),
+
+            categoria: categoria.trim(),
+
+            compra: Number(compra),
+
+            venta: Number(venta),
+
+            stock: Number(stock),
+
+            imagen: imagen.trim()
+
         };
 
         guardarLocalStorage(copia);
 
         limpiarFormulario();
 
-        alert("Producto actualizado.");
+        alert("✅ Producto actualizado.");
 
     };
 
@@ -152,16 +227,23 @@ function ProductManager({ actualizarTotal }) {
 
                 <input
                     type="text"
-                    placeholder="Nombre"
+                    placeholder="Nombre del producto"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                 />
 
                 <input
                     type="number"
-                    placeholder="Precio"
-                    value={precio}
-                    onChange={(e) => setPrecio(e.target.value)}
+                    placeholder="Precio de compra"
+                    value={compra}
+                    onChange={(e) => setCompra(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Precio de venta"
+                    value={venta}
+                    onChange={(e) => setVenta(e.target.value)}
                 />
 
                 <input
@@ -169,6 +251,13 @@ function ProductManager({ actualizarTotal }) {
                     placeholder="Categoría"
                     value={categoria}
                     onChange={(e) => setCategoria(e.target.value)}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Stock"
+                    value={stock}
+                    onChange={(e) => setStock(e.target.value)}
                 />
 
                 <input
@@ -190,7 +279,6 @@ function ProductManager({ actualizarTotal }) {
                         <button onClick={agregarProducto}>
                             Agregar Producto
                         </button>
-
                 }
 
             </div>
@@ -205,8 +293,10 @@ function ProductManager({ actualizarTotal }) {
                     <tr>
 
                         <th>Nombre</th>
-                        <th>Precio</th>
+                        <th>Compra</th>
+                        <th>Venta</th>
                         <th>Categoría</th>
+                        <th>Stock</th>
                         <th>Imagen</th>
                         <th>Acciones</th>
 
@@ -219,28 +309,46 @@ function ProductManager({ actualizarTotal }) {
                     {
                         productos.map((producto, indice) => (
 
-                            <tr key={indice}>
+                            <tr key={producto.id ?? indice}>
 
-                                <td>{producto.nombre}</td>
+                                <td>
+                                    {producto.nombre}
+                                </td>
 
-                                <td>${producto.precio}</td>
+                                <td>
+                                    ${producto.compra}
+                                </td>
 
-                                <td>{producto.categoria}</td>
+                                <td>
+                                    ${producto.venta}
+                                </td>
 
-                                <td>{producto.imagen}</td>
+                                <td>
+                                    {producto.categoria}
+                                </td>
+
+                                <td>
+                                    {producto.stock}
+                                </td>
+
+                                <td>
+                                    {producto.imagen}
+                                </td>
 
                                 <td>
 
-                                    {/* Botón para editar un producto */}
                                     <button
-                                        onClick={() => editarProducto(indice)}
+                                        onClick={() =>
+                                            editarProducto(indice)
+                                        }
                                     >
                                         Editar
                                     </button>
 
-                                    {/* Botón para eliminar un producto */}
                                     <button
-                                        onClick={() => eliminarProducto(indice)}
+                                        onClick={() =>
+                                            eliminarProducto(indice)
+                                        }
                                     >
                                         Eliminar
                                     </button>

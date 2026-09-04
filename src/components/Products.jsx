@@ -1,9 +1,35 @@
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import productos from "../data/productos";
+import productosIniciales from "../data/productos";
 import "../styles/products.css";
 
 // Componente que muestra el catálogo de productos disponibles
 function Products() {
+
+    // Estado que almacena el inventario actual
+    const [productos, setProductos] = useState([]);
+
+    // Carga el inventario almacenado
+    useEffect(() => {
+
+        const datosGuardados =
+            JSON.parse(localStorage.getItem("productos"));
+
+        const inventario =
+            datosGuardados && datosGuardados.length > 0
+                ? datosGuardados
+                : productosIniciales;
+
+        // Si todavía no existe el inventario, se guardan
+        // los productos iniciales en LocalStorage
+        localStorage.setItem(
+            "productos",
+            JSON.stringify(inventario)
+        );
+
+        setProductos(inventario);
+
+    }, []);
 
     return (
 
@@ -11,11 +37,10 @@ function Products() {
 
             <h2>Productos disponibles</h2>
 
-            {/* Contenedor donde se muestran todas las tarjetas de productos */}
+            {/* Contenedor donde se muestran las tarjetas de productos */}
             <div className="contenedor-productos">
 
                 {
-                    // Recorre el arreglo de productos y crea una tarjeta para cada uno
                     productos.map((producto) => (
 
                         <ProductCard

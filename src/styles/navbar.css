@@ -26,6 +26,11 @@
     padding:4px;
 }
 
+/* Enlace del logo */
+.logo a{
+    text-decoration:none;
+}
+
 /* Nombre de la empresa */
 .logo h2{
     color:white;
@@ -44,13 +49,24 @@
 
 /* Opciones del menú */
 .navbar li{
-    color:white;
     font-weight:bold;
     cursor:pointer;
+}
+
+/* Enlaces del menú */
+.navbar li a{
+    color:white;
+    text-decoration:none;
     transition:.3s;
 }
 
 /* Efecto al pasar el cursor sobre las opciones */
-.navbar li:hover{
+.navbar li a:hover{
     color:#F4C542;
+}
+
+/* Efecto para el nombre de la empresa */
+.nombre-empresa:hover h2{
+    color:#F4C542;
+    transition:.3s;
 }

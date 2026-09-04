@@ -10,22 +10,35 @@ function SalesHistory() {
     // Función para cargar las ventas almacenadas
     const cargarVentas = () => {
 
-        const datos = JSON.parse(localStorage.getItem("ventas")) || [];
+        const datos =
+            JSON.parse(localStorage.getItem("ventas")) || [];
 
         setVentas(datos);
 
     };
 
-    // Carga las ventas al iniciar el componente y escucha cambios en el almacenamiento
+    // Carga las ventas al iniciar el componente
     useEffect(() => {
 
         cargarVentas();
 
+        // Escucha cambios realizados desde otras pestañas
         window.addEventListener("storage", cargarVentas);
+
+        // Escucha el evento personalizado generado dentro de la aplicación
+        window.addEventListener("ventaRealizada", cargarVentas);
 
         return () => {
 
-            window.removeEventListener("storage", cargarVentas);
+            window.removeEventListener(
+                "storage",
+                cargarVentas
+            );
+
+            window.removeEventListener(
+                "ventaRealizada",
+                cargarVentas
+            );
 
         };
 
@@ -38,8 +51,6 @@ function SalesHistory() {
             <h2>📋 Historial de Ventas</h2>
 
             {
-
-                // Verifica si existen ventas registradas
                 ventas.length === 0 ?
 
                     <p>No hay ventas registradas.</p>
@@ -63,32 +74,41 @@ function SalesHistory() {
                         <tbody>
 
                             {
-
-                                // Recorre la lista de ventas para mostrarlas en la tabla
                                 ventas.map((venta, index) => (
 
-                                    <tr key={index}>
-
-                                        <td>{venta.fecha}</td>
-
-                                        <td>{venta.productos.length}</td>
+                                    <tr
+                                        key={venta.id ?? index}
+                                    >
 
                                         <td>
+                                            {venta.fecha}
+                                        </td>
 
-                                            ${venta.total.toLocaleString("es-CO")}
+                                        <td>
+                                            {
+                                                venta.productos.reduce(
+                                                    (total, producto) =>
+                                                        total + producto.cantidad,
+                                                    0
+                                                )
+                                            }
+                                        </td>
 
+                                        <td>
+                                            $
+                                            {Number(
+                                                venta.total
+                                            ).toLocaleString("es-CO")}
                                         </td>
 
                                     </tr>
 
                                 ))
-
                             }
 
                         </tbody>
 
                     </table>
-
             }
 
         </section>
